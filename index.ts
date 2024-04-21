@@ -1,4 +1,6 @@
 import { IData } from "./i-data";
+var fs = require("fs");
+const xlsx = require('xlsx');
 
 const moreThenTwentyFiveYears = async (data: IData[]) => {
     let cities: string[] = [];
@@ -106,10 +108,10 @@ const findGreaterByGroupedCities = async (data: [string, string, number][]) => {
 
     const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-    let groupedByMonth: any = [];
+    let groupedByMonth: [string, string, number][][] = [];
 
     for await (const month of months) {
-        let monthGroup: any = [];
+        let monthGroup: [string, string, number][] = [];
         for await (const register of data) {
             if (parseInt(register[1].split('/')[1]) === month) {
                 monthGroup.push(register);
@@ -118,7 +120,7 @@ const findGreaterByGroupedCities = async (data: [string, string, number][]) => {
         groupedByMonth.push(monthGroup);
     }
 
-    let greaters: any = [];
+    let greaters: [string, string, number][] = [];
     for await (const month of groupedByMonth) {
         let greater = month[0];
         for await (const register of month) {
@@ -129,7 +131,42 @@ const findGreaterByGroupedCities = async (data: [string, string, number][]) => {
         greaters.push(greater);
     }
 
-    console.log(greaters);
+    return greaters;
+};
+
+const parseToJSON = async (data: [string, string, number][][]) => {
+    let jsonList: object[] = [];
+
+    for await (const register of data) {
+        jsonList.push(
+            {
+                "Posto": register[0][0],
+                "Janeiro": register[0][1] + ' - ' + register[0][2],
+                "Fevereiro": register[1][1] + ' - ' + register[1][2],
+                "Março": register[2][1] + ' - ' + register[2][2],
+                "Abril": register[3][1] + ' - ' + register[3][2],
+                "Maio": register[4][1] + ' - ' + register[4][2],
+                "Junho": register[5][1] + ' - ' + register[5][2],
+                "Julho": register[6][1] + ' - ' + register[6][2],
+                "Agosto": register[7][1] + ' - ' + register[7][2],
+                "Setembro": register[8][1] + ' - ' + register[8][2],
+                "Outubro": register[9][1] + ' - ' + register[9][2],
+                "Novembro": register[10][1] + ' - ' + register[10][2],
+                "Dezembro": register[11][1] + ' - ' + register[11][2],
+            }
+        );
+    }
+
+    return jsonList;
+};
+
+const convertToXlsx = async (jsonData: object[], outputFilePath: string) => {
+    const workbook = await xlsx.utils.book_new();
+    const sheet = await xlsx.utils.json_to_sheet(jsonData);
+    await xlsx.utils.book_append_sheet(workbook, sheet, 'Sheet 1');
+    await xlsx.writeFile(workbook, outputFilePath);
+
+    console.log(`Conversion from JSON to XLSX successful!`);
 };
 
 (async function () {
@@ -137,15 +174,19 @@ const findGreaterByGroupedCities = async (data: [string, string, number][]) => {
     const data = await moreThenTwentyFiveYears(rawData);
 
     let greaterData: string[] = [];
-
     for await (const register of data) {
         greaterData.push(await findGreaterRainfallFromIData(register));
     }
 
     const groupedCities = await groupeCities(greaterData);
 
+    let greaters: [string, string, number][][] = [];
     for await (const city of groupedCities) {
-        findGreaterByGroupedCities(city);
+        greaters.push(await findGreaterByGroupedCities(city));
     }
+
+    const jsonList: object[] = await parseToJSON(greaters);
+
+    await convertToXlsx(jsonList, 'maioresChuvasHistoricas.xlsx');
 
 })();
