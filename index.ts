@@ -141,18 +141,18 @@ const parseToJSON = async (data: [string, string, number][][]) => {
         jsonList.push(
             {
                 "Posto": register[0][0],
-                "Janeiro": register[0][1] + ' - ' + register[0][2],
-                "Fevereiro": register[1][1] + ' - ' + register[1][2],
-                "Março": register[2][1] + ' - ' + register[2][2],
-                "Abril": register[3][1] + ' - ' + register[3][2],
-                "Maio": register[4][1] + ' - ' + register[4][2],
-                "Junho": register[5][1] + ' - ' + register[5][2],
-                "Julho": register[6][1] + ' - ' + register[6][2],
-                "Agosto": register[7][1] + ' - ' + register[7][2],
-                "Setembro": register[8][1] + ' - ' + register[8][2],
-                "Outubro": register[9][1] + ' - ' + register[9][2],
-                "Novembro": register[10][1] + ' - ' + register[10][2],
-                "Dezembro": register[11][1] + ' - ' + register[11][2],
+                "Janeiro": register[0][1] + ' - ' + ((register[0][2]).toString().includes('.') ? (register[0][2]).toString() : (register[0][2]).toString() + '.0'),
+                "Fevereiro": register[1][1] + ' - ' + ((register[1][2]).toString().includes('.') ? (register[1][2]).toString() : (register[1][2]).toString() + '.0'),
+                "Março": register[2][1] + ' - ' + ((register[2][2]).toString().includes('.') ? (register[2][2]).toString() : (register[2][2]).toString() + '.0'),
+                "Abril": register[3][1] + ' - ' + ((register[3][2]).toString().includes('.') ? (register[3][2]).toString() : (register[3][2]).toString() + '.0'),
+                "Maio": register[4][1] + ' - ' + ((register[4][2]).toString().includes('.') ? (register[4][2]).toString() : (register[4][2]).toString() + '.0'),
+                "Junho": register[5][1] + ' - ' + ((register[5][2]).toString().includes('.') ? (register[5][2]).toString() : (register[5][2]).toString() + '.0'),
+                "Julho": register[6][1] + ' - ' + ((register[6][2]).toString().includes('.') ? (register[6][2]).toString() : (register[6][2]).toString() + '.0'),
+                "Agosto": register[7][1] + ' - ' + ((register[7][2]).toString().includes('.') ? (register[7][2]).toString() : (register[7][2]).toString() + '.0'),
+                "Setembro": register[8][1] + ' - ' + ((register[8][2]).toString().includes('.') ? (register[8][2]).toString() : (register[8][2]).toString() + '.0'),
+                "Outubro": register[9][1] + ' - ' + ((register[9][2]).toString().includes('.') ? (register[9][2]).toString() : (register[9][2]).toString() + '.0'),
+                "Novembro": register[10][1] + ' - ' + ((register[10][2]).toString().includes('.') ? (register[10][2]).toString() : (register[10][2]).toString() + '.0'),
+                "Dezembro": register[11][1] + ' - ' + ((register[11][2]).toString().includes('.') ? (register[11][2]).toString() : (register[11][2]).toString() + '.0'),
             }
         );
     }
